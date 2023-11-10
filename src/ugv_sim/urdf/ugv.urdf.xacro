@@ -80,25 +80,7 @@
         izz="0.001"/>
     </inertial>
   </link>
-<!-- Dummy Wheel  -->
 
-<link name="dummy_wheel">
-  <visual>
-    <geometry>
-      <cylinder length="0.02" radius="0.03"/>
-    </geometry>
-    <material name="black"/>
-  </visual>
-  <collision>
-    <geometry>
-      <cylinder length="0.1" radius="0.05"/>
-    </geometry>
-  </collision>
-  <inertial>
-    <mass value="1.0"/>
-    <inertia ixx="0.01" ixy="0.0" ixz="0.0" iyy="0.01" iyz="0.0" izz="0.02"/>
-  </inertial>
-</link>
 
   <!-- Joints -->
   <!-- Left Wheel Joint -->
@@ -116,13 +98,7 @@
     <origin xyz="0 -0.3 -0.02" rpy="1.5707 0 0"/>
     <axis xyz="0 0 1"/>
   </joint>
-  <!-- Dummy Wheel Joinr  -->
 
-<joint name="dummy_wheel_joint" type="fixed">
-  <parent link="base_link"/>
-  <child link="dummy_wheel"/>
-  <origin xyz="0.25 0 -0.04" rpy="1.5707 0 -0.02"/>
-</joint>
   <!-- Transmission for wheels -->
   <transmission name="left_wheel_trans">
     <type>transmission_interface/SimpleTransmission</type>
