@@ -1,2 +1,1 @@
-# kolaydi
-Kolaydı - Eforsuz UGV
+# Kolaydı - Eforsuz UGV
