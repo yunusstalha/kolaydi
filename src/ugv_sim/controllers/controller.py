@@ -108,6 +108,34 @@ from std_msgs.msg import Float64
 from tf.transformations import euler_from_quaternion
 import tf
 import numpy as np
+from geometry_msgs.msg import Point, PoseArray
+import numpy as np
+from scipy.interpolate import CubicSpline
+import matplotlib.pyplot as plt
+
+# Define start and end positions
+start_position = [0, 0]  # Starting coordinates
+end_position = [10, 10]  # Ending coordinates
+
+# Define the times at which the start and end positions occur
+times = [0,1,2,3,4,5,6]  # Start at time 0, end at time 1
+
+# Create arrays for x and y coordinates
+x = [0,1,3,2,2,3,1]
+y = [0,1,-2,-2,5,10,10]
+
+# Create cubic splines with boundary conditions (zero velocity at start and end)
+cs_x = CubicSpline(times, x, )
+cs_y = CubicSpline(times, y, )
+
+# Sample points from the cubic spline
+t_new = np.linspace(0, 6, 100)
+tt_new = np.linspace(0,6,100)
+x_new = cs_x(t_new)
+y_new = cs_y(tt_new)
+
+
+xy_new = np.column_stack((x_new, y_new))
 
 
 class RobotPositionController:
@@ -127,25 +155,25 @@ class RobotPositionController:
         self.current_orientation = 0.0
         
 
-        self.desired_position = [0, 14.22]
+        self.desired_position = [0, 0]
         
         # Robot parameters
         self.wheel_base = 0.3  # distance between the wheels
         
         # PID control parameters for linear position control
         self.kp_linear = 5  # proportional gain
-        self.ki_linear = 0.0  # integral gain
-        self.kd_linear = 0.01 # derivative gain
+        self.ki_linear = 0.01  # integral gain
+        self.kd_linear = 0.0 # derivative gain
         self.linear_integral = 0.0
         self.last_linear_error = 0.0
         
         # PID control parameters for angular position control
-        self.kp_angular = 8.  # proportional gain
+        self.kp_angular = 10.  # proportional gain
         self.ki_angular = 0.  # integral gain
         self.kd_angular = 0.1 # derivative gain
         self.angular_integral = 0.0
         self.last_angular_error = 0.0
-        
+        self.angle_flag = False
         # Control loop timing
         self.last_time = rospy.Time.now()
 
@@ -186,7 +214,8 @@ class RobotPositionController:
         # self.desired_orientation = yaw
 
     def control_loop(self):
-        rate = rospy.Rate(10)  # 10 Hz
+        rate = rospy.Rate(50)  # 10 Hz
+        
         while not rospy.is_shutdown():
             current_time = rospy.Time.now()
             dt = (current_time - self.last_time).to_sec()
@@ -227,10 +256,14 @@ class RobotPositionController:
             
             # Publish the velocity command
             vel_left, vel_right = Float64(), Float64()
-            
-            vel_left.data, vel_right.data = self.diff_drive(control_signal.linear.x, control_signal.angular.z)
-            self.right_wheel_pub.publish(vel_right)
-            self.left_wheel_pub.publish(vel_left)
+            if self.angle_flag == False:
+                vel_left.data, vel_right.data = self.diff_drive(0, control_signal.angular.z)
+                self.right_wheel_pub.publish(vel_right)
+                self.left_wheel_pub.publish(vel_left)
+            else:
+                vel_left.data, vel_right.data = self.diff_drive(control_signal.linear.x,control_signal.angular.z)
+                self.right_wheel_pub.publish(vel_right)
+                self.left_wheel_pub.publish(vel_left)
             #self.cmd_vel_pub.publish(control_signal)
             
             # Save the current errors and time for the next iteration
@@ -238,22 +271,32 @@ class RobotPositionController:
             self.last_angular_error = angular_error
             self.last_time = current_time
 
-            rospy.loginfo("Wheel Velocity: %s", [vel_right, vel_left])
-            rospy.loginfo("Current Velocity: %s", control_signal.linear.x)
-            rospy.loginfo("Current position: %s", self.current_position)
-            rospy.loginfo("Desired position: %s", self.desired_position)
+            # rospy.loginfo("Wheel Velocity: %s", [vel_right, vel_left])
+            # rospy.loginfo("Current Velocity: %s", control_signal.linear.x)
+            # rospy.loginfo("Current position: %s", self.current_position)
+            # rospy.loginfo("Desired position: %s", self.desired_position)
             
-            rospy.loginfo("Error: %s", [delta_x, delta_y])
-            rospy.loginfo("Angular error: %s", angular_error)
-            if abs(delta_x) < 0.01 and abs(delta_y) < 0.01:
-                rospy.loginfo("Reached the goal!")
+            # rospy.loginfo("Error: %s", [delta_x, delta_y])
+
+            # rospy.loginfo("Angular error: %s", angular_error)
+            if abs(abs(angular_error) - np.pi) < 0.01:
+                rospy.loginfo("Reached the angle!")
+                self.angle_flag = True
+            elif abs(abs(angular_error) - np.pi) > 0.1:
+                self.angle_flag = False
+                
+            if abs(delta_x) < 0.2 and abs(delta_y) < 0.2:
+                rospy.loginfo("Reached the point %s!", self.desired_position)
                 vel_left.data, vel_right.data = 0, 0
+                break
             rate.sleep()
 
 if __name__ == '__main__':
     try:
         controller = RobotPositionController()
         rospy.sleep(1.0)
-        controller.control_loop()
+        for i in range(len(xy_new)):
+            controller.desired_position = xy_new[i]
+            controller.control_loop()
     except rospy.ROSInterruptException:
         pass
