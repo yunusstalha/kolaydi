@@ -1,0 +1,27 @@
+<launch>
+  <arg name="model" default="$(find ugv_sim)/urdf/ugv.urdf.xacro"/>
+  <arg name="robot_name" default="my_robot"/>
+
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="$(find ugv_sim)/worlds/my_world.world"/>
+    <arg name="paused" value="false"/>
+    <arg name="use_sim_time" value="true"/>
+  </include>
+
+  <param name="robot_description" command="$(find xacro)/xacro --inorder $(arg model)"/>
+
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher">
+    <param name="publish_frequency" type="double" value="50.0"/>
+    <param name="tf_prefix" value=""/>
+  </node>
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher"/>
+
+  <node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-urdf -model $(arg robot_name) -param robot_description"/>
+  
+  <rosparam file="$(find ugv_sim)/config/controllers.yaml" command="load" />
+  <!-- <node name="gazebo_ros_control" pkg="gazebo_ros_control" type="gazebo_ros_control" respawn="false" output="screen"/> -->
+  <node name="ros_control_controller_spawner" pkg="controller_manager" type="spawner" args=" left_wheel_controller right_wheel_controller" output="screen" respawn="false"/>
+  <!-- <node pkg="tf2_ros" type="static_transform_publisher" name="world_to_base_link_broadcaster"
+      args="0 0 0 0 0 0 world base_link" /> -->
+</launch>
+<!-- controller1_name -->

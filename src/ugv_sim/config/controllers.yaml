@@ -1,0 +1,26 @@
+controller1_name:
+  type: "diff_drive_controller/DiffDriveController"
+  left_wheel: 'left_wheel_joint'
+  right_wheel: 'right_wheel_joint'
+  publish_rate: 50
+  pose_covariance_diagonal: [0.001, 0.001, 1000000.0, 1000000.0, 1000000.0, 0.03]
+  twist_covariance_diagonal: [0.001, 0.001, 1000000.0, 1000000.0, 1000000.0, 0.03]
+  cmd_vel_timeout: 0.25
+  base_frame_id: "base_link"
+  enable_odom_tf: true
+
+  wheel_separation: 0.15
+  wheel_radius: 0.06
+
+  wheel_separation_multiplier: 1.0
+  wheel_radius_multiplier: 1.0
+
+  # Add PID controllers if necessary
+left_wheel_controller:
+  type: velocity_controllers/JointVelocityController
+  joint: left_wheel_joint
+  #pid: {p: 1.0, i: 0.1, d: 0.0}
+right_wheel_controller:
+  type: velocity_controllers/JointVelocityController
+  joint: right_wheel_joint
+  #pid: {p: 1.0, i: 0.1, d: 0.0}
