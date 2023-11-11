@@ -288,15 +288,16 @@ class RobotPositionController:
             if abs(delta_x) < 0.2 and abs(delta_y) < 0.2:
                 rospy.loginfo("Reached the point %s!", self.desired_position)
                 vel_left.data, vel_right.data = 0, 0
-                break
+                # break
             rate.sleep()
 
 if __name__ == '__main__':
     try:
         controller = RobotPositionController()
         rospy.sleep(1.0)
-        for i in range(len(xy_new)):
-            controller.desired_position = xy_new[i]
-            controller.control_loop()
+        controller.control_loop()
+        # for i in range(len(xy_new)):
+        #     controller.desired_position = xy_new[i]
+        #     controller.control_loop()
     except rospy.ROSInterruptException:
         pass

@@ -80,7 +80,15 @@
         izz="0.001"/>
     </inertial>
   </link>
-
+<!-- Lidar Link -->
+<link name="lidar_link">
+  <visual>
+    <geometry>
+      <cylinder length="0.1" radius="${wheel_radius}"/>
+    </geometry>
+    <!-- Add material properties if desired -->
+  </visual>
+</link>
 
   <!-- Joints -->
   <!-- Left Wheel Joint -->
@@ -98,6 +106,14 @@
     <origin xyz="0 -0.3 -0.02" rpy="1.5707 0 0"/>
     <axis xyz="0 0 1"/>
   </joint>
+  <!-- Lidar Joint -->
+  <joint name="lidar_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="lidar_link"/>
+    <!-- Define the origin of the joint -->
+    <origin xyz="0 0 0.1" rpy="0 0 0"/>
+  </joint>
+
 
   <!-- Transmission for wheels -->
   <transmission name="left_wheel_trans">
@@ -142,4 +158,32 @@
       <rpyOffsets>0 0 0</rpyOffsets>
 </plugin>
   </gazebo>
+
+<gazebo reference="lidar_link">
+  
+  <sensor type="ray" name="lidar_sensor">
+    <pose>0 0 0 0 0 0</pose>
+    <visualize>true</visualize>
+    <update_rate>10</update_rate>
+    <ray>
+      <scan>
+        <horizontal>
+          <samples>720</samples>
+          <resolution>1</resolution>
+          <min_angle>0</min_angle>
+          <max_angle>1.570796</max_angle>
+        </horizontal>
+      </scan>
+      <range>
+        <min>0.1</min>
+        <max>30.0</max>
+        <resolution>0.01</resolution>
+      </range>
+    </ray>
+    <plugin name="gazebo_ros_laser_controller" filename="libgazebo_ros_laser.so">
+      <topicName>/scan</topicName>
+      <frameName>lidar_link</frameName>
+    </plugin>
+  </sensor>
+</gazebo>
 </robot>
