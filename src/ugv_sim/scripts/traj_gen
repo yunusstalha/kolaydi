@@ -25,7 +25,7 @@ y_new = cs_y(tt_new)
 
 
 xy_new = np.column_stack((x_new, y_new))
-print(xy_new[0].shape)
+
 
 print(x_new, y_new)
 # Plot the trajectory
