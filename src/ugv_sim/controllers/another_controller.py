@@ -1,106 +1,3 @@
-# #!/usr/bin/env python
-# import rospy
-# from geometry_msgs.msg import Twist
-# from nav_msgs.msg import Odometry
-# from tf.transformations import euler_from_quaternion
-# import math
-
-# class RobotPositionController:
-#     def __init__(self):
-#         # Initialize the node
-#         rospy.init_node('robot_position_controller')
-        
-#         # Publisher to send velocity commands to the robot's base
-#         self.cmd_vel_pub = rospy.Publisher('/controller1_name/cmd_vel', Twist, queue_size=10)
-        
-#         # Subscriber to get the current position and orientation of the robot
-#         rospy.Subscriber('/controller1_name/odom', Odometry, self.odom_callback)
-        
-#         # Robot's current position and orientation
-#         self.current_position = [0.0, 0.0]  # x, y
-#         self.current_orientation = 0.0  # yaw
-        
-#         # Desired position for the robot
-#         self.desired_position = [1.0, 1.0]  # x, y
-#         self.desired_orientation = 0.0  # yaw (optional, if you want to control orientation)
-
-
-#     def odom_callback(self, msg):
-#         # Update the current position of the robot
-#         self.current_position = [msg.pose.pose.position.x, msg.pose.pose.position.y]
-        
-#         # Get the current orientation from the quaternion
-#         orientation_q = msg.pose.pose.orientation
-#         orientation_list = [orientation_q.x, orientation_q.y, orientation_q.z, orientation_q.w]
-#         (_, _, yaw) = euler_from_quaternion(orientation_list)
-#         self.current_orientation = yaw
-    
-#     def control_loop(self):
-#         rate = rospy.Rate(10)  # 10 Hz
-#         while not rospy.is_shutdown():
-#             # Compute the control action to reach the desired position
-#             control_action = Twist()
-            
-#             # Compute your control law here to populate control_action
-#             # This is where you implement your position control algorithm
-#             # For example, a simple proportional controller could be:
-#             error_x = self.desired_position[0] - self.current_position[0]
-#             error_y = self.desired_position[1] - self.current_position[1]
-            
-#             # Convert error to robot's frame of reference
-#             error_forward = error_x * math.cos(self.current_orientation) + error_y * math.sin(self.current_orientation)
-#             error_lateral = -error_x * math.sin(self.current_orientation) + error_y * math.cos(self.current_orientation)
-            
-#             # Simple proportional control
-#             control_action.linear.x = 0.5 * error_forward
-#             control_action.angular.z = 0.1 * error_lateral  # Adjust this if you also want to control orientation
-            
-#             # Ensure the velocity commands are within bounds
-#             # ...
-
-#             # Publish the velocity commands
-#             self.cmd_vel_pub.publish(control_action)
-#             rospy.loginfo("Current position: %s", self.current_position)
-#             rospy.loginfo("Desired position: %s", self.desired_position)
-#             rospy.loginfo("Error: %s", [error_x, error_y])
-#             rate.sleep()
-
-# if __name__ == '__main__':
-#     try:
-#         controller = RobotPositionController()
-#         controller.control_loop()
-#     except rospy.ROSInterruptException:
-#         pass
-
-
-
-
-
-# def forward_kinematics(self, v_left_wheel, v_right_wheel, theta, dt):
-#     # Calculate linear and angular velocities
-#     v = (v_left_wheel + v_right_wheel) / 2
-#     w = (v_right_wheel - v_left_wheel) / self.wheel_base
-    
-#     # Update pose
-#     delta_x = v * np.cos(theta) * dt
-#     delta_y = v * np.sin(theta) * dt
-#     delta_theta = w * dt
-
-#     return delta_x, delta_y, delta_theta
-
-
-# def jacobian(self, v_left_wheel, v_right_wheel, theta):
-#     # Calculate elements of the Jacobian matrix
-#     dx_dvl = np.cos(theta) / 2
-#     dx_dvr = np.cos(theta) / 2
-#     dw_dvl = 1 / (2 * self.wheel_base)
-#     dw_dvr = -1 / (2 * self.wheel_base)
-
-#     return np.array([[dx_dvl, dx_dvr], [dw_dvl, dw_dvr]])
-
-
-
-
 
 #!/usr/bin/env python
 import math
@@ -309,7 +206,7 @@ class RobotPositionController:
             if abs(delta_x) < 0.5 and abs(delta_y) < 0.5:
                 rospy.loginfo("Reached the point %s!", self.desired_position)
                 vel_left.data, vel_right.data = 0, 0
-                break
+                # break
             self.path_publisher.publish(self.path)
             rate.sleep()
 
@@ -318,11 +215,11 @@ if __name__ == '__main__':
     try:
         controller = RobotPositionController(xy_new)
         rospy.sleep(1.0)
-        # while True:
-        #     controller.control_loop()
+
         for i in range(len(xy_new)):
             
             controller.desired_position = xy_new[i]
             controller.control_loop()
+        #controller.control_loop()
     except rospy.ROSInterruptException:
         pass
