@@ -238,7 +238,7 @@ class RobotPositionController:
 
     def control_loop(self):
         rate = rospy.Rate(10)  # 10 Hz
-        
+        print("A")
         while not rospy.is_shutdown():
             current_time = rospy.Time.now()
             dt = (current_time - self.last_time).to_sec()
