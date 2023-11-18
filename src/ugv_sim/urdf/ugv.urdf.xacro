@@ -103,15 +103,19 @@
       izz="0.001"/>
   </inertial>
 </link>
-<!-- Lidar Link -->
-<link name="lidar_link">
-  <visual>
-    <geometry>
-      <cylinder length="0.1" radius="${wheel_radius}"/>
-    </geometry>
-    <!-- Add material properties if desired -->
-  </visual>
-</link>
+
+  <link name="lidar_link">
+    <visual>
+      <geometry>
+        <box size="0.1 0.1 0.05"/> <!-- Size to be adjusted -->
+      </geometry>
+    </visual>
+    <inertial>
+      <mass value="1.0"/> <!-- Adjust mass -->
+      <inertia ixx="0.001" ixy="0" ixz="0" iyy="0.001" iyz="0" izz="0.001"/> <!-- Adjust inertia -->
+    </inertial>
+  </link>
+
 
   <!-- Joints -->
   <!-- Left Wheel Joint -->
@@ -129,19 +133,46 @@
     <origin xyz="0 -0.3 -0.02" rpy="1.5707 0 0"/>
     <axis xyz="0 0 1"/>
   </joint>
-  <!-- Lidar Joint -->
+
+
+  <!-- Front Joint -->
+  <joint name="front_wheel_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="front_wheel"/>
+    <origin xyz="0.25 0 -0.055" rpy="0 0 0"/> <!-- Adjust xyz as per the desired position -->
+  </joint>
+
+
+  <!-- Servo Motor Joint -->
+  <joint name="servo_joint" type="revolute">
+    <parent link="base_link"/>
+    <child link="lidar_link"/>
+    <origin xyz="0 0 0.1" rpy="0 0 0"/> <!-- Position to be adjusted -->
+    <axis xyz="0 1 0"/>
+    <limit lower="-1.57" upper="1.57" effort="5" velocity="1"/>
+  </joint>
+
+  <!-- Lidar Joint
   <joint name="lidar_joint" type="fixed">
     <parent link="base_link"/>
     <child link="lidar_link"/>
-    <!-- Define the origin of the joint -->
+
     <origin xyz="0 0 0.1" rpy="0 0 0"/>
-  </joint>
-<!-- Front Joint -->
-<joint name="front_wheel_joint" type="fixed">
-  <parent link="base_link"/>
-  <child link="front_wheel"/>
-  <origin xyz="0.25 0 -0.055" rpy="0 0 0"/> <!-- Adjust xyz as per the desired position -->
-</joint>
+  </joint> -->
+
+
+
+<!-- Lidar Link -->
+<!-- <link name="lidar_link">
+  <visual>
+    <geometry>
+      <cylinder length="0.1" radius="${wheel_radius}"/>
+    </geometry>
+  </visual>
+</link> -->
+
+
+
   <!-- Transmission for wheels -->
   <transmission name="left_wheel_trans">
     <type>transmission_interface/SimpleTransmission</type>
@@ -164,13 +195,25 @@
       <mechanicalReduction>1</mechanicalReduction>
     </actuator>
   </transmission>
+  <!-- Transmission for Servo Motor -->
+<transmission name="servo_transmission">
+  <type>transmission_interface/SimpleTransmission</type>
+  <joint name="servo_joint">
+    <hardwareInterface>PositionJointInterface</hardwareInterface>
+  </joint>
+  <actuator name="servo_motor">
+    <hardwareInterface>PositionJointInterface</hardwareInterface>
+    <mechanicalReduction>1</mechanicalReduction>
+  </actuator>
+</transmission>
+
 <gazebo>
     <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
       <robotNamespace>/</robotNamespace>
       <!-- <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
       <legacyModeNS>true</legacyModeNS> -->
       <robotParam>robot_description</robotParam>
-      <controller name=" left_wheel_controller right_wheel_controller"/>
+      <controller name=" left_wheel_controller right_wheel_controller servo_controller"/>
     </plugin>
     <plugin name="p3d_base_controller" filename="libgazebo_ros_p3d.so">
       <alwaysOn>true</alwaysOn>

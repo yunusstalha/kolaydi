@@ -20,7 +20,7 @@
   
   <rosparam file="$(find ugv_sim)/config/controllers.yaml" command="load" />
   <!-- <node name="gazebo_ros_control" pkg="gazebo_ros_control" type="gazebo_ros_control" respawn="false" output="screen"/> -->
-  <node name="ros_control_controller_spawner" pkg="controller_manager" type="spawner" args=" left_wheel_controller right_wheel_controller" output="screen" respawn="false"/>
+  <node name="ros_control_controller_spawner" pkg="controller_manager" type="spawner" args=" joint_state_controller left_wheel_controller right_wheel_controller servo_controller" output="screen" respawn="false"/>
   <!-- <node pkg="tf2_ros" type="static_transform_publisher" name="world_to_base_link_broadcaster"
       args="0 0 0 0 0 0 world base_link" /> -->
 </launch>
