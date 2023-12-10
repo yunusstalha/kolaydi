@@ -18,7 +18,7 @@ class LaserScanToPointCloud:
         self.tf_listener = tf.TransformListener()
 
         self.state = "MOVE"  # Default state
-
+        rospy.loginfo("State changed to MOVE")
     def laser_callback(self, data):
         # Process and publish the point cloud only if in MAP state
         if self.state == "MAP":
