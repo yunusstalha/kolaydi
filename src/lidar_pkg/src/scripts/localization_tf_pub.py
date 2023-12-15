@@ -46,8 +46,8 @@ class LidarTFBroadcaster:
         lidar_itself.header.frame_id = 'lidar_link'
         lidar_itself.child_frame_id = 'laser'
         lidar_itself.transform.translation.x = 0.0
-        lidar_itself.transform.translation.y = 0.04
-        lidar_itself.transform.translation.z = 0.0
+        lidar_itself.transform.translation.y = 0.0
+        lidar_itself.transform.translation.z = 0.04
         q = tf.transformations.quaternion_from_euler(0, 0, 0)
         lidar_itself.transform.rotation.x = q[0]
         lidar_itself.transform.rotation.y = q[1]

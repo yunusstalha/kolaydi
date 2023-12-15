@@ -1,0 +1,7 @@
+image: /home/burcu/git/kolaydi/ogrids/.pgm
+resolution: 0.025000
+origin: [-1.800000, -3.475000, -nan]
+negate: 0
+occupied_thresh: 0.65
+free_thresh: 0.196
+
