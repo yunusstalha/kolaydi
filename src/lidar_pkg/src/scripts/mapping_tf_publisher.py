@@ -5,6 +5,21 @@ import tf2_ros
 from geometry_msgs.msg import TransformStamped
 from std_msgs.msg import Float64
 import numpy as np
+
+
+def map_value(value):
+    # Original range
+    original_min = 69
+    original_max = 119
+    # Target range
+    target_min = -30
+    target_max = 30
+    
+    # Mapping
+    return (value - original_min) / (original_max - original_min) * (target_max - target_min) + target_min
+
+
+
 class LidarTFBroadcaster:
     def __init__(self):
         # Initialize the node
@@ -80,7 +95,7 @@ class LidarTFBroadcaster:
         
     def handle_lidar_roll(self, msg):
         # Update the current roll angle
-        self.current_roll = msg.data / 180.0 * 3.14159 - 3.14159 / 2.0
+        self.current_roll = map_value(msg.data) / 180.0 * np.pi
 
     def handle_base_link_transform(self, msg):
         # Update the current transform for base_link
@@ -100,6 +115,7 @@ class LidarTFBroadcaster:
         self.base_link_transform.transform.rotation.x = q[0]
         self.base_link_transform.transform.rotation.y = q[1]
         self.base_link_transform.transform.rotation.z = q[2]
+        
         self.base_link_transform.transform.rotation.w = q[3]
 
 
@@ -107,7 +123,7 @@ class LidarTFBroadcaster:
         # Broadcast the dynamic transform for lidar_link
         q = tf.transformations.quaternion_from_euler(self.current_roll, 0, 0)
         self.dynamic_broadcaster.sendTransform(
-            (0, 0, 0.052),  # translation
+            (0, 0, 0.142),  # translation
             q,  # rotation
             rospy.Time.now(),
             'lidar_link',  # child frame

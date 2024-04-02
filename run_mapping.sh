@@ -18,8 +18,6 @@ create_tmux_session() {
 }
 
 # Create tmux sessions for various tasks
-create_tmux_session "rplidar" "roslaunch rplidar_ros rplidar_a1.launch"
-sleep 3
 create_tmux_session "tf_publisher" "python3 src/lidar_pkg/src/scripts/mapping_tf_publisher.py"
 sleep 1
 create_tmux_session "arduino" "rosrun rosserial_python serial_node.py /dev/ttyUSB1"

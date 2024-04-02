@@ -67,7 +67,7 @@ class LidarTFBroadcaster:
         # Broadcast the dynamic transform for lidar_link
         q = tf.transformations.quaternion_from_euler(self.current_roll, 0, 0)
         self.dynamic_broadcaster.sendTransform(
-            (0, 0, 0.052),  # translation
+            (0, 0, 0.142),  # translation
             q,  # rotation
             rospy.Time.now(),
             'lidar_link',  # child frame

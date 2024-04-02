@@ -18,6 +18,7 @@ create_tmux_session() {
 }
 
 # Create tmux sessions for various tasks
+create_tmux_session "joy" "rosrun joy joy_node "
 create_tmux_session "rplidar" "roslaunch rplidar_ros rplidar_a1.launch"
 sleep 2
 create_tmux_session "tf_publisher" "python3 src/lidar_pkg/src/scripts/localization_tf_pub.py"
@@ -26,7 +27,7 @@ create_tmux_session "odom" "roslaunch lidar_pkg odom.launch"
 sleep 1
 create_tmux_session "map" "rosrun map_server map_server ogrids/map.yaml"
 sleep 1
-create_tmux_session "amcl" "rosrun amcl amcl"
+create_tmux_session "amcl" "roslaunch lidar_pkg amcl_loc.launch"
 sleep 1 
 create_tmux_session "rviz" "rviz"
 
