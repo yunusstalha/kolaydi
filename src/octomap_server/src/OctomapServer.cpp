@@ -89,6 +89,8 @@ OctomapServer::OctomapServer(const ros::NodeHandle private_nh_, const ros::NodeH
   m_nh_private.param("pointcloud_max_z", m_pointcloudMaxZ, m_pointcloudMaxZ);
   m_nh_private.param("occupancy_min_z", m_occupancyMinZ, m_occupancyMinZ);
   m_nh_private.param("occupancy_max_z", m_occupancyMaxZ, m_occupancyMaxZ);
+  m_nh_private.param("projected_map_min_z", m_projectedMapMinZ);
+  m_nh_private.param("projected_map_max_z", m_projectedMapMaxZ); 
   m_nh_private.param("min_x_size", m_minSizeX, m_minSizeX);
   m_nh_private.param("min_y_size", m_minSizeY, m_minSizeY);
 
@@ -1035,36 +1037,42 @@ void OctomapServer::handleFreeNodeInBBX(const OcTreeT::iterator& it) {
 }
 
 void OctomapServer::update2DMap(const OcTreeT::iterator& it, bool occupied) {
-  // Define the Z-axis range limits
-  double z_min_limit = 0.05;  // Adjust these values as needed
-  double z_max_limit = 0.25;
+    // Determine whether to consider the Z-axis limits based on whether they are set to -1
+    bool considerMinZ = m_projectedMapMinZ != -1;
+    bool considerMaxZ = m_projectedMapMaxZ != -1;
 
-  // Check if the node's Z-coordinate is within the specified range
-  if (it.getZ() >= z_min_limit && it.getZ() <= z_max_limit) {
-    if (it.getDepth() == m_maxTreeDepth) {
-      unsigned idx = mapIdx(it.getKey());
-      if (occupied)
-        m_gridmap.data[mapIdx(it.getKey())] = 100;
-      else if (m_gridmap.data[idx] == -1) {
-        m_gridmap.data[idx] = 0;
-      }
-    } else {
-      int intSize = 1 << (m_maxTreeDepth - it.getDepth());
-      octomap::OcTreeKey minKey = it.getIndexKey();
-      for (int dx = 0; dx < intSize; dx++) {
-        int i = (minKey[0] + dx - m_paddedMinKey[0]) / m_multires2DScale;
-        for (int dy = 0; dy < intSize; dy++) {
-          unsigned idx = mapIdx(i, (minKey[1] + dy - m_paddedMinKey[1]) / m_multires2DScale);
-          if (occupied)
-            m_gridmap.data[idx] = 100;
-          else if (m_gridmap.data[idx] == -1) {
-            m_gridmap.data[idx] = 0;
-          }
+    // Check if the node's Z-coordinate is within the specified range
+    // True if we don't consider the limit or if the coordinate meets the limit condition
+    bool withinMinZ = !considerMinZ || it.getZ() >= m_projectedMapMinZ;
+    bool withinMaxZ = !considerMaxZ || it.getZ() <= m_projectedMapMaxZ;
+
+    if (withinMinZ && withinMaxZ) {
+        // The node is within the Z-axis limits or the limits are ignored
+        if (it.getDepth() == m_maxTreeDepth) {
+            unsigned idx = mapIdx(it.getKey());
+            if (occupied)
+                m_gridmap.data[idx] = 100; // Mark as occupied
+            else if (m_gridmap.data[idx] == -1) {
+                m_gridmap.data[idx] = 0; // Mark as free if previously unknown
+            }
+        } else {
+            int intSize = 1 << (m_maxTreeDepth - it.getDepth());
+            octomap::OcTreeKey minKey = it.getIndexKey();
+            for (int dx = 0; dx < intSize; dx++) {
+                int i = (minKey[0] + dx - m_paddedMinKey[0]) / m_multires2DScale;
+                for (int dy = 0; dy < intSize; dy++) {
+                    unsigned idx = mapIdx(i, (minKey[1] + dy - m_paddedMinKey[1]) / m_multires2DScale);
+                    if (occupied)
+                        m_gridmap.data[idx] = 100; // Mark as occupied
+                    else if (m_gridmap.data[idx] == -1) {
+                        m_gridmap.data[idx] = 0; // Mark as free if previously unknown
+                    }
+                }
+            }
         }
-      }
     }
-  }
 }
+
 
 bool OctomapServer::isSpeckleNode(const OcTreeKey& nKey) const {
   OcTreeKey key;

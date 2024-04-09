@@ -11,6 +11,8 @@
 		<param name="ground_filter/distance" value="0.1" />
 		<param name="pointcloud_min_z" value="0.10" />
 		<param name="pointcloud_max_z" value="1.0" />
+		<param name="projected_map_min_z" value="0.10" />
+		<param name="projected_map_min_z" value="0.20" />
 
 		<!-- <param name="occupancy_min_z" value="0.13"/>
 		<param name="occupancy_max_z" value="3.0"/> -->
