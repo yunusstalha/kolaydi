@@ -1,0 +1,56 @@
+Panels:
+  - Class: rviz/Displays
+    HelpPath: ""
+    Name: Displays
+Visualization Managers:
+  - Class: ""
+    Displays:
+      - Alpha: 0.5
+        Class: rviz/Map
+        Color Scheme: map
+        Draw Behind: true
+        Enabled: true
+        Name: Map
+        Topic: /map
+      - Class: rviz/RobotModel
+        Enabled: true
+        Name: RobotModel
+      - Angle Min Step: 0.01
+        Class: rviz/LaserScan
+        Color: 255; 50; 50
+        Enabled: true
+        Name: LaserScan
+        Size (Pixels): 3
+        Topic: /scan
+      - Class: rviz/PoseArray
+        Color: 55; 255; 55
+        Enabled: false
+        Name: Particle Cloud
+        Topic: /particlecloud
+      - Class: rviz/Path
+        Color: 50; 250; 50
+        Enabled: true
+        Line Style:
+          Line Width: 0.05
+          Value: Lines
+        Name: Planned Path
+        Topic: /move_base/NavfnROS/plan
+    Enabled: true
+    Name: root
+    Tools:
+      - Class: rviz/Interact
+      - Class: rviz/MoveCamera
+      - Class: rviz/Select
+      - Class: rviz/SetGoal
+      - Class: rviz/SetInitialPose
+    Views:
+      - Class: rviz/Orbit
+        Eye: [0.5, 0.5, 0.5]
+        Focal Point: [0, 0, 0]
+        Name: Current View
+        Value: Orbit (rviz)
+Window Geometry:
+  Height: 1000
+  Width: 1200
+  X: 50
+  Y: 50
