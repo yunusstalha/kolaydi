@@ -9,6 +9,8 @@
     <!-- <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher">
         <param name="publish_frequency" value="50.0" />
         <remap from="joint_states" to="/joint_states" />
+        <param name="base_global_planner" value="global_planner/RRTGlobalPlanner"/>
+<rosparam file="$(find rrt-global-planner)/params/rrt_global_planner.yaml" command="load" />
     </node> -->
     
     
