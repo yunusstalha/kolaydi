@@ -1,15 +1,15 @@
 <launch>
     <!-- Load the map server -->
-    <node name="map_server" pkg="map_server" type="map_server" args="$(find motion_pkg)/map/my_map.yaml"/>
+    <!-- <node name="map_server" pkg="map_server" type="map_server" args="$(find motion_pkg)/map/my_map.yaml"/> -->
 
     <!-- Load the URDF into the parameter server -->
-    <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find motion_pkg)/urdf/eforsuz.urdf'" />
+
     
     <!-- Use robot_state_publisher to publish the robot's state -->
-    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher">
+    <!-- <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher">
         <param name="publish_frequency" value="50.0" />
         <remap from="joint_states" to="/joint_states" />
-    </node>
+    </node> -->
     
     
     <!-- Move Base -->
@@ -19,8 +19,11 @@
         <rosparam file="$(find motion_pkg)/config/local_costmap_params.yaml" command="load" />
         <rosparam file="$(find motion_pkg)/config/global_costmap_params.yaml" command="load" />
         <rosparam file="$(find motion_pkg)/config/base_local_planner_params.yaml" command="load" />
+        <param name="clearing_rotation_allowed" value="false"/>
+
+
     </node>
     
     <!-- RViz -->
-    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find motion_pkg)/rviz/eforsuz.rviz"/>
+    <!-- <node name="rviz" pkg="rviz" type="rviz" args="-d $(find motion_pkg)/rviz/eforsuz.rviz"/> -->
 </launch>

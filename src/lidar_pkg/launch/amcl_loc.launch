@@ -10,8 +10,9 @@
         <param name="initial_cov_yy" value="0.125"/>
         <param name="initial_cov_aa" value="0.125"/>
 
-        <param name="update_min_d" value="0.1"/>
-
+        <param name="update_min_d" value="-1"/>
+        <param name="update_min_a" value="-1"/>
+        
         <param name="laser_z_hit" value="0.5"/>
         <param name="laser_z_short" value="0.05"/>
         <param name="laser_z_max" value="0.05"/>
