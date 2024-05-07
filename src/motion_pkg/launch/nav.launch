@@ -20,6 +20,9 @@
         <rosparam file="$(find motion_pkg)/config/costmap_common_params.yaml" command="load" ns="local_costmap" />
         <rosparam file="$(find motion_pkg)/config/local_costmap_params.yaml" command="load" />
         <rosparam file="$(find motion_pkg)/config/global_costmap_params.yaml" command="load" />
+        <!-- <rosparam file="$(find motion_pkg)/config/move_base_params.yaml" command="load" /> -->
+        <rosparam param="recovery_behaviors"> [ { name: "move_slow_and_clear", type: 'move_slow_and_clear/MoveSlowAndClear' } ] </rosparam>
+
         <rosparam file="$(find motion_pkg)/config/base_local_planner_params.yaml" command="load" />
         <param name="clearing_rotation_allowed" value="false"/>
 
