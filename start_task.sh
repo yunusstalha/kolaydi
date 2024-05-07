@@ -35,9 +35,12 @@ tmux set -g mouse on
 
 # Create other tmux sessions for various tasks
 create_tmux_session "rplidar" "roslaunch rplidar_ros rplidar_a1.launch"
-create_tmux_session "tf_publisher" "python3 ~/git/kolaydi/src/lidar_pkg/src/scripts/localization_tf_pub.py"
+sleep 2
+create_tmux_session "tf_publisher" "python3 ~/git/kolaydi/src/lidar_pkg/scripts/localization_tf_pub.py"
+sleep 3
 create_tmux_session "odom" "roslaunch lidar_pkg odom.launch"
-create_tmux_session "amcl" "roslaunch lidar_pkg amcl_loc.launch"
+sleep 3
+create_tmux_session "amcl" "roslaunch lidar_pkg amcl_localization.launch"
 
 # Attach to the main session
 tmux attach -t main

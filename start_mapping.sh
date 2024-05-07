@@ -46,7 +46,7 @@ tmux select-pane -t 3
 tmux send-keys 'source ~/.bashrc' C-m
 tmux send-keys 'source /opt/ros/noetic/setup.bash' C-m
 tmux send-keys 'source ~/git/kolaydi/devel/setup.bash' C-m
-tmux send-keys 'python3 ~/git/kolaydi/src/lidar_pkg/scripts/localization_tf_pub.py' C-m
+tmux send-keys 'python3 ~/git/kolaydi/src/lidar_pkg/scripts/laser_scan_to_point_cloud_node.py' C-m
 tmux send-keys 'p' C-m
 
 # Select the first pane for LiDAR init
