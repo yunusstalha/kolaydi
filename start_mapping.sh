@@ -42,7 +42,7 @@ tmux send-keys 'p' C-m
 
 # Laser to PCL
 tmux split-window -h
-tmux select-pane -t 3
+tmux select-pane -t 4
 tmux send-keys 'source ~/.bashrc' C-m
 tmux send-keys 'source /opt/ros/noetic/setup.bash' C-m
 tmux send-keys 'source ~/git/kolaydi/devel/setup.bash' C-m
