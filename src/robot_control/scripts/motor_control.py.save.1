@@ -37,9 +37,9 @@ def set_motor_speed(motor, speed):
     if speed > 0:
         GPIO.output(in1, GPIO.HIGH)
         GPIO.output(in2, GPIO.LOW)
-        pwm.ChangeDutyCycle(min(speed, 100))
-        #print("AAAAAAAAA")
-        #pwm.ChangeDutyCycle(100)
+        #pwm.ChangeDutyCycle(min(speed, 100))
+        
+,pwm.ChangeDutyCycle(100)
     elif speed < 0:
         GPIO.output(in1, GPIO.LOW)
         GPIO.output(in2, GPIO.HIGH)
@@ -52,7 +52,7 @@ def set_motor_speed(motor, speed):
 def cmd_vel_callback(data):
     rospy.loginfo("Received cmd_vel")
     linear_speed = data.linear.x  # Typically meters/sec
-    angular_speed = data.angular.z  * 1.5 # Typically radians/sec
+    angular_speed = data.angular.z  * 2 # Typically radians/sec
 
     GPIO.output(STBY, GPIO.HIGH)
 

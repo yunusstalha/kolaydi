@@ -44,6 +44,6 @@ create_tmux_session "amcl" "roslaunch lidar_pkg amcl_localization.launch"
 sleep 2
 create_tmux_session "motor" "rosrun robot_control motor_control.py"
 sleep 2
-create_tmux_session "nav" "roslaunch lidar_pkg navigation.launch"
+create_tmux_session "nav" "roslaunch motion_pkg nav.launch"
 # Attach to the main session
 tmux attach -t main

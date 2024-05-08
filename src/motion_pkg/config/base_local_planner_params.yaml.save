@@ -1,0 +1,18 @@
+rosparam list | grep controller_frequency
+TrajectoryPlannerROS:
+  max_vel_x: 0.5
+  min_vel_x: 0.1
+  max_vel_theta: 0.5
+  min_in_place_vel_theta: 0.2
+  acc_lim_theta: 2
+  acc_lim_x: 0.5
+  meter_scoring: true
+
+  holonomic_robot: false
+  yaw_goal_tolerance: 1  # about 6 degrees
+  xy_goal_tolerance: 0.2  # 20 cm
+  latch_xy_goal_tolerance: false
+  cost_scaling_factor: 1.4
+
+  transform_tolerance: 10
+  controller_frequency: 5.0
