@@ -19,8 +19,10 @@ create_tmux_session() {
 
 # Create tmux sessions for various tasks
 create_tmux_session "roscore" "roscore"
-sleep 1
+sleep 3
+create_tmux_session "octomap" "roslaunch lidar_pkg mapping.launch"
 echo "Octomap initialized" 
+sleep 2
 create_tmux_session "rviz" "rosrun rviz rviz -d ~/git/kolaydi/mapping.rviz"
 sleep 1 
 echo "Rviz initialized"
