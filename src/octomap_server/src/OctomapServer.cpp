@@ -89,8 +89,8 @@ OctomapServer::OctomapServer(const ros::NodeHandle private_nh_, const ros::NodeH
   m_nh_private.param("pointcloud_max_z", m_pointcloudMaxZ, m_pointcloudMaxZ);
   m_nh_private.param("occupancy_min_z", m_occupancyMinZ, m_occupancyMinZ);
   m_nh_private.param("occupancy_max_z", m_occupancyMaxZ, m_occupancyMaxZ);
-  m_nh_private.param("projected_map_min_z", m_projectedMapMinZ);
-  m_nh_private.param("projected_map_max_z", m_projectedMapMaxZ); 
+  m_nh_private.param("projected_map_min_z", m_projectedMapMinZ, m_projectedMapMinZ);
+  m_nh_private.param("projected_map_max_z", m_projectedMapMaxZ, m_projectedMapMaxZ); 
   m_nh_private.param("min_x_size", m_minSizeX, m_minSizeX);
   m_nh_private.param("min_y_size", m_minSizeY, m_minSizeY);
 
