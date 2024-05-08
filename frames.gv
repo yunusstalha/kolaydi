@@ -1,9 +1,0 @@
-digraph G {
-"base_link" -> "lidar_link"[label="Broadcaster: /lidar_tf_broadcaster\nAverage rate: 40.356 Hz\nMost recent transform: 1702205290.458 ( 2.195 sec old)\nBuffer length: 2.800 sec\n"];
-"base_link" -> "base_footprint"[label="Broadcaster: /lidar_tf_broadcaster\nAverage rate: 10000.000 Hz\nMost recent transform: 0.000 ( 1702205292.653 sec old)\nBuffer length: 0.000 sec\n"];
-"lidar_link" -> "laser"[label="Broadcaster: /lidar_tf_broadcaster\nAverage rate: 10000.000 Hz\nMost recent transform: 0.000 ( 1702205292.653 sec old)\nBuffer length: 0.000 sec\n"];
-edge [style=invis];
- subgraph cluster_legend { style=bold; color=black; label ="view_frames Result";
-"Recorded at time: 1702205292.653"[ shape=plaintext ] ;
- }->"base_link";
-}
