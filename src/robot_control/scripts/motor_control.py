@@ -52,7 +52,7 @@ def set_motor_speed(motor, speed):
 def cmd_vel_callback(data):
     rospy.loginfo("Received cmd_vel")
     linear_speed = data.linear.x  # Typically meters/sec
-    angular_speed = data.angular.z  * 1.5 # Typically radians/sec
+    angular_speed = data.angular.z  * 1.3 # Typically radians/sec
 
     GPIO.output(STBY, GPIO.HIGH)
 
