@@ -1,6 +1,6 @@
 image: /home/burcu/git/kolaydi/ogrids/map.pgm
 resolution: 0.025000
-origin: [-3.175000, -1.350000, 0]
+origin: [-2.550000, -4.200000, -0]
 negate: 0
 occupied_thresh: 0.65
 free_thresh: 0.196
