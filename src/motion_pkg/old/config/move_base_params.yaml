@@ -1,3 +1,0 @@
-recovery_behaviors:
-  -name: 'move_slow_and_clear'
-  type: 'move_slow_and_clear/MoveSlowAndClear'
